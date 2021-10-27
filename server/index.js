@@ -1,13 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const User = require("./models/User");
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json({ limit: "20mb", extented: true }));
-app.use(bodyParser.urlencoded({ limit: "20mb", extented: true }));
+app.use(express.json({ limit: "20mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Welcome to wHealth App.");
