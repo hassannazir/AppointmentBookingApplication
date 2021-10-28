@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const config = require("config");
 
 const app = express();
 app.use(cors());
@@ -11,8 +12,7 @@ app.get("/", (req, res) => {
 });
 
 //Set up mongoose connection
-var mongoDB =
-  "mongodb+srv://whealth:whealth123@hafiz-cluster.2s8dc.mongodb.net/whealthdb?retryWrites=true&w=majority";
+var mongoDB = config.mongodbURI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));

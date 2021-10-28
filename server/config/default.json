@@ -1,0 +1,3 @@
+{
+    "mongodbURI":  "mongodb+srv://whealth:whealth123@hafiz-cluster.2s8dc.mongodb.net/whealthdb?retryWrites=true&w=majority"
+}

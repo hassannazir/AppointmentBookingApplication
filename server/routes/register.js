@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express();
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 router.post("", async (req, res) => {
   const user = req.body;
@@ -17,21 +18,28 @@ router.post("", async (req, res) => {
       delete user.speciality;
       delete user.licenseNumber;
     }
+
     var newUser = new User({
       ...user,
     });
-  } else res.send({ status: false, message: "Object is Empty!" });
-
-  try {
-    await newUser.save();
-    res.send({
-      status: true,
-      message: "Successfully Registered!",
-      data: newUser,
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) res.send({ status: false, message: err.message });
+      bcrypt.hash(newUser.password, salt, async (err, hash) => {
+        if (err) res.send({ status: false, message: err.message });
+        newUser.password = hash;
+        try {
+          await newUser.save();
+          res.send({
+            status: true,
+            message: "Successfully Registered!",
+            data: newUser,
+          });
+        } catch (error) {
+          res.send({ status: false, message: error.message });
+        }
+      });
     });
-  } catch (error) {
-    res.send({ status: false, message: error.message });
-  }
+  } else res.send({ status: false, message: "Object is Empty!" });
 });
 
 module.exports = router;
