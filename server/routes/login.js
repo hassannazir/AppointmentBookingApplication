@@ -2,6 +2,8 @@ const express = require("express");
 const router = express();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 router.post("", async (req, res) => {
   const user = req.body;
@@ -20,11 +22,23 @@ router.post("", async (req, res) => {
         return res.send({ status: false, message: error.message });
       }
       if (isVerify) {
-        return res.send({
-          status: true,
-          message: "Logged In Successfully",
-          data: loggedInUser,
-        });
+        try {
+          const token = jwt.sign(
+            { user: loggedInUser },
+            config.get("jwtSecretKey"),
+            {
+              expiresIn: 3600,
+            }
+          );
+          return res.send({
+            status: true,
+            message: "Logged In Successfully",
+            token: token,
+            data: loggedInUser,
+          });
+        } catch (err) {
+          return res.send({ status: false, message: err.message });
+        }
       } else {
         return res.send({
           status: false,
