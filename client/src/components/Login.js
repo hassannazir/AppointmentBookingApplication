@@ -1,28 +1,35 @@
 import axios from "axios";
-import { useState } from "react";
+import logo from "../images/whealth.png";
+import { useState, useContext } from "react";
 import { useAlert } from "react-alert";
 import { useCookies } from "react-cookie";
+import { UserContext } from "../contexts/userContext";
+
 const Login = (props) => {
   const alert = useAlert();
-  const [loggedInUser, setloggedInUser] = useState({ email: "", password: "" });
-  const [cookies, setCookie] = useCookies(["loggedInUser"]);
+  const { currentUser, setcurrentUser } = useContext(UserContext);
+  const [logInUser, setlogInUser] = useState({ email: "", password: "" });
+  const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
   const onLogin = async (e) => {
     e.preventDefault();
-    const result = await axios.post(
-      "http://localhost:5000/login",
-      loggedInUser
-    );
-    var currentUser = result.data;
-    if (currentUser.status) {
-      alert.show(currentUser.message);
-      setCookie("loggedInUser", currentUser.data[0], { path: "/" });
+    const result = await axios.post("http://localhost:5000/login", logInUser);
+    var ctUser = result.data;
+    if (ctUser.status) {
+      alert.show(ctUser.message);
+      setCookie("loggedInUser", ctUser.data[0], { path: "/" });
+      setCookie("token", ctUser.token, { path: "/" });
+      setcurrentUser({ ...ctUser.data[0] });
       props.history.push("/");
     } else {
-      alert.show(currentUser.message);
+      alert.show(ctUser.message);
     }
   };
   return (
-    <div className="auth-wrapper">
+    // <div className="auth-wrapper">
+    <div>
+      <div className="logo">
+        <img src={logo} width="200px" height="150px" />
+      </div>
       <div className="auth-inner">
         <form onSubmit={onLogin}>
           <h3>Sign In</h3>
@@ -34,9 +41,9 @@ const Login = (props) => {
               className="form-control"
               placeholder="Enter email"
               onChange={(e) =>
-                setloggedInUser({ ...loggedInUser, email: e.target.value })
+                setlogInUser({ ...logInUser, email: e.target.value })
               }
-              value={loggedInUser.email}
+              value={logInUser.email}
               required
             />
           </div>
@@ -48,9 +55,9 @@ const Login = (props) => {
               className="form-control"
               placeholder="Enter password"
               onChange={(e) =>
-                setloggedInUser({ ...loggedInUser, password: e.target.value })
+                setlogInUser({ ...logInUser, password: e.target.value })
               }
-              value={loggedInUser.password}
+              value={logInUser.password}
               required
             />
           </div>

@@ -1,20 +1,27 @@
 import { Link } from "react-router-dom";
-import logo from "../whealth.png";
 import { useAlert } from "react-alert";
 import { useContext } from "react";
 import { useCookies } from "react-cookie";
 import { LoginContext } from "../contexts/loginContext";
 import { RegisterContext } from "../contexts/registerContext";
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Button from "react-bootstrap/Button";
+import { UserContext } from "../contexts/userContext";
+import Role from "../helpers/role";
 
 const Header = () => {
   const alert = useAlert();
   const { isLogin, setisLogin } = useContext(LoginContext);
   const { isRegister, setisRegister } = useContext(RegisterContext);
   const [cookies, setCookie, removeCookie] = useCookies(["loggedInUser"]);
+  const { currentUser, setcurrentUser } = useContext(UserContext);
 
   const onHomeClick = () => {
     setisLogin(true);
     setisRegister(true);
+    console.log(currentUser);
   };
   const onLoginClick = () => {
     setisLogin(false);
@@ -28,42 +35,91 @@ const Header = () => {
     setisLogin(false);
     setisRegister(true);
     alert.show("Successfully Logged out!");
+    setcurrentUser(null);
     removeCookie("loggedInUser", { path: "/" });
+    removeCookie("token", { path: "/" });
   };
   return (
-    <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-      <div className="container">
-        <Link className="navbar-brand" to={"/"} onClick={onHomeClick}>
-          <img src={logo} alt="app logo" width="110px" height="110px" />{" "}
-        </Link>
-
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-          <ul className="navbar-nav">
-            {cookies.loggedInUser == null && isLogin && (
-              <li className="nav-item nav-login" onClick={onLoginClick}>
-                <Link className=" btn btn-secondary" to={"/sign-in"}>
-                  Login
-                </Link>
-              </li>
-            )}
-            {cookies.loggedInUser == null && isRegister && (
-              <li className="nav-item nav-signup" onClick={onRegisterClick}>
-                <Link className="btn btn-secondary sm" to={"/sign-up"}>
-                  Register
-                </Link>
-              </li>
-            )}
-            {cookies.loggedInUser && (
-              <li className="nav-item nav-logout" onClick={onLogoutClick}>
-                <Link className="btn btn-secondary sm" to={"/sign-in"}>
-                  Logout
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container fluid>
+        <Navbar.Brand href="#"> wHealth</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Collapse id="navbarScroll">
+          <Nav
+            className="me-auto my-2 my-lg-0"
+            style={{ maxHeight: "100px" }}
+            navbarScroll
+          >
+            {" "}
+            <Link className="nav-link" to={"/"} onClick={onHomeClick}>
+              <Button variant="outline-secondary">Home</Button>
+            </Link>
+            {currentUser
+              ? currentUser.role === Role.DOCTOR && (
+                  <Link className="nav-link" to={"/"}>
+                    <Button variant="outline-secondary">Patients</Button>
+                  </Link>
+                )
+              : ""}
+            {currentUser
+              ? currentUser.role === Role.DOCTOR && (
+                  <Link className="nav-link" to={"/bookings"}>
+                    <Button variant="outline-secondary">Bookings</Button>
+                  </Link>
+                )
+              : ""}
+            {currentUser
+              ? currentUser.role === Role.DOCTOR && (
+                  <Link className="nav-link" to={"/schedule"}>
+                    <Button variant="outline-secondary">Schedule</Button>
+                  </Link>
+                )
+              : ""}
+            {currentUser
+              ? currentUser.role === Role.PATIENT && (
+                  <Link className="nav-link" to={"/doctors"}>
+                    <Button variant="outline-secondary">Doctors</Button>
+                  </Link>
+                )
+              : ""}
+          </Nav>
+          {cookies.loggedInUser == null && isLogin && (
+            <Link
+              style={{ color: "black" }}
+              className="nav-link"
+              to={"/sign-in"}
+              onClick={onLoginClick}
+            >
+              <Button variant="outline-success">Sign in</Button>
+            </Link>
+          )}
+          {cookies.loggedInUser == null && isRegister && (
+            <Link
+              className="nav-link"
+              to={"/sign-up"}
+              onClick={onRegisterClick}
+            >
+              {" "}
+              <Button variant="outline-success">Register</Button>
+            </Link>
+          )}
+          {cookies.loggedInUser && (
+            <Link className="nav-link" to={"/sign-in"} onClick={onLogoutClick}>
+              <Button variant="outline-danger"> Logout</Button>
+            </Link>
+          )}
+          {/* <Form className="d-flex">
+            <FormControl
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="outline-success">Search</Button>
+          </Form> */}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

@@ -19,6 +19,9 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/login"));
+app.use("/doctor", require("./routes/doctor"));
+app.use("/schedule", require("./routes/schedule"));
+app.use("/appointment", require("./routes/appointment"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`App is running on ${PORT}`));
