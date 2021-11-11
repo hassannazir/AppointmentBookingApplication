@@ -39,6 +39,7 @@ const Schedule = (props) => {
         status: "Pending",
         patient: [cookies.loggedInUser._id],
         schedule: [sid],
+        doctor: [did],
       },
       {
         headers: {

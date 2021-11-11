@@ -9,7 +9,6 @@ router.post("/add", auth, async (req, res) => {
     const appointment = req.body;
     if (appointment) {
       const booking = new Appointment(appointment);
-      console.log(booking);
       await booking.save();
     }
   } catch (error) {
@@ -38,6 +37,22 @@ router.put("/status", auth, async (req, res) => {
       { _id: appId },
       { status: status }
     ).exec();
+    res.send({ status: true, data: result });
+  } catch (error) {
+    res.send({ status: false, message: error.message });
+  }
+});
+
+router.get("/approved", auth, async (req, res) => {
+  try {
+    console.log(req.user._id);
+    const result = await Appointment.find({
+      patientId: req.user._id,
+      $or: [{ status: "Approved" }, { status: "Pending" }],
+    })
+      .populate("doctor schedule")
+      .exec();
+    console.log(result);
     res.send({ status: true, data: result });
   } catch (error) {
     res.send({ status: false, message: error.message });

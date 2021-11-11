@@ -11,6 +11,7 @@ import { useState } from "react";
 import Schedule from "./components/Schedule";
 import Doctors from "./components/Doctors";
 import Bookings from "./components/Bookings";
+import PatientBookings from "./components/PatientBookings.js";
 
 function App() {
   const [isLogin, setisLogin] = useState(true);
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/schedule" component={Schedule} />
                 <Route path="/doctors" component={Doctors} />
                 <Route path="/bookings" component={Bookings} />
+                <Route path="/patientBookings" component={PatientBookings} />
               </Switch>
             </div>
           </UserContext.Provider>

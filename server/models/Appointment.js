@@ -8,6 +8,7 @@ const AppointmentSchema = mongoose.Schema(
     status: String,
     patient: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     schedule: [{ type: mongoose.Schema.Types.ObjectId, ref: "Schedule" }],
+    doctor: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

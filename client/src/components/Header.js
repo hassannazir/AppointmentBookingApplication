@@ -82,6 +82,14 @@ const Header = () => {
                   </Link>
                 )
               : ""}
+            {currentUser
+              ? currentUser.role === Role.PATIENT && (
+                  <Link className="nav-link" to={"/patientBookings"}>
+                    <Button variant="outline-secondary">My Appointments</Button>
+                  </Link>
+                )
+              : ""}{" "}
+            {console.log(currentUser)}
           </Nav>
           {cookies.loggedInUser == null && isLogin && (
             <Link
