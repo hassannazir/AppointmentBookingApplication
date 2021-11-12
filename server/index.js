@@ -20,6 +20,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/login"));
 app.use("/doctor", require("./routes/doctor"));
+app.use("/patient", require("./routes/patient"));
 app.use("/schedule", require("./routes/schedule"));
 app.use("/appointment", require("./routes/appointment"));
 

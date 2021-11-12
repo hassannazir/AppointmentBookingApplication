@@ -129,7 +129,7 @@ const Schedule = (props) => {
       setPending(false);
     }, 1000);
     return () => clearTimeout(timeout);
-  }, []);
+  });
 
   return (
     <div style={{ margin: "1% 2%" }}>

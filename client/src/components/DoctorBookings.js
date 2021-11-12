@@ -9,7 +9,7 @@ const ExpandedComponent = ({ data }) => (
   <pre>{JSON.stringify(data, null, 2)}</pre>
 );
 
-const PatientBookings = (props) => {
+const DoctorBookings = (props) => {
   const alert = useAlert();
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
@@ -19,13 +19,13 @@ const PatientBookings = (props) => {
 
   const columns = [
     {
-      name: "Doctor Name",
-      selector: (row) => row.doctor[0].name,
+      name: "Patient Name",
+      selector: (row) => row.patient[0].name,
       sortable: true,
     },
     {
       name: "Contact",
-      selector: (row) => row.doctor[0].contact,
+      selector: (row) => row.patient[0].contact,
       sortable: true,
     },
     {
@@ -48,7 +48,7 @@ const PatientBookings = (props) => {
   React.useEffect(async () => {
     const timeout = setTimeout(async () => {
       const scheduleList = await axios.get(
-        "http://localhost:5000/appointment/approved",
+        "http://localhost:5000/appointment/doctorBookings",
         {
           headers: {
             "auth-token": cookies.token,
@@ -74,4 +74,4 @@ const PatientBookings = (props) => {
     </div>
   );
 };
-export default PatientBookings;
+export default DoctorBookings;

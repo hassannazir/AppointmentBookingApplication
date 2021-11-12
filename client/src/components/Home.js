@@ -15,7 +15,7 @@ export default function Home() {
   const { currentUser, setcurrentUser } = useContext(UserContext);
   return (
     <div>
-      {currentUser === null || currentUser == {} ? (
+      {cookies.loggedInUser == null || cookies.loggedInUser == {} ? (
         <Carousel>
           <Carousel.Item>
             <img className="w-50" src={logo3} alt="Second slide" />
@@ -39,9 +39,9 @@ export default function Home() {
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
-      ) : currentUser.role === ROLE.DOCTOR ? (
+      ) : cookies.loggedInUser.role === ROLE.DOCTOR ? (
         <Doctor user={cookies.loggedInUser} token={cookies.token} />
-      ) : currentUser.role === ROLE.ADMIN ? (
+      ) : cookies.loggedInUser.role === ROLE.ADMIN ? (
         <Admin />
       ) : (
         <Patient />

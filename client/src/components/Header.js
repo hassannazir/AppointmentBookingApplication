@@ -21,7 +21,6 @@ const Header = () => {
   const onHomeClick = () => {
     setisLogin(true);
     setisRegister(true);
-    console.log(currentUser);
   };
   const onLoginClick = () => {
     setisLogin(false);
@@ -42,7 +41,12 @@ const Header = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
-        <Navbar.Brand href="#"> wHealth</Navbar.Brand>
+        {cookies.loggedInUser ? (
+          <Navbar.Brand href="#"> {cookies.loggedInUser.name}</Navbar.Brand>
+        ) : (
+          <Navbar.Brand href="#"> wHealth</Navbar.Brand>
+        )}
+
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -54,42 +58,56 @@ const Header = () => {
             <Link className="nav-link" to={"/"} onClick={onHomeClick}>
               <Button variant="outline-secondary">Home</Button>
             </Link>
-            {currentUser
-              ? currentUser.role === Role.DOCTOR && (
-                  <Link className="nav-link" to={"/"}>
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.DOCTOR && (
+                  <Link className="nav-link" to={"/patients"}>
                     <Button variant="outline-secondary">Patients</Button>
                   </Link>
                 )
               : ""}
-            {currentUser
-              ? currentUser.role === Role.DOCTOR && (
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.DOCTOR && (
                   <Link className="nav-link" to={"/bookings"}>
                     <Button variant="outline-secondary">Bookings</Button>
                   </Link>
                 )
               : ""}
-            {currentUser
-              ? currentUser.role === Role.DOCTOR && (
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.DOCTOR && (
                   <Link className="nav-link" to={"/schedule"}>
                     <Button variant="outline-secondary">Schedule</Button>
                   </Link>
                 )
               : ""}
-            {currentUser
-              ? currentUser.role === Role.PATIENT && (
+            {cookies.loggedInUser
+              ? (cookies.loggedInUser.role === Role.PATIENT ||
+                  cookies.loggedInUser.role === Role.ADMIN) && (
                   <Link className="nav-link" to={"/doctors"}>
                     <Button variant="outline-secondary">Doctors</Button>
                   </Link>
                 )
               : ""}
-            {currentUser
-              ? currentUser.role === Role.PATIENT && (
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.ADMIN && (
+                  <Link className="nav-link" to={"/allPatients"}>
+                    <Button variant="outline-secondary">Patients</Button>
+                  </Link>
+                )
+              : ""}
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.PATIENT && (
                   <Link className="nav-link" to={"/patientBookings"}>
                     <Button variant="outline-secondary">My Appointments</Button>
                   </Link>
                 )
               : ""}{" "}
-            {console.log(currentUser)}
+            {cookies.loggedInUser
+              ? cookies.loggedInUser.role === Role.DOCTOR && (
+                  <Link className="nav-link" to={"/doctorBookings"}>
+                    <Button variant="outline-secondary">My Appointments</Button>
+                  </Link>
+                )
+              : ""}{" "}
           </Nav>
           {cookies.loggedInUser == null && isLogin && (
             <Link

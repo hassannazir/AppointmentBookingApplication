@@ -12,6 +12,9 @@ import Schedule from "./components/Schedule";
 import Doctors from "./components/Doctors";
 import Bookings from "./components/Bookings";
 import PatientBookings from "./components/PatientBookings.js";
+import DoctorBookings from "./components/DoctorBookings.js";
+import Patients from "./components/Patients";
+import AllPatients from "./components/AllPatients";
 
 function App() {
   const [isLogin, setisLogin] = useState(true);
@@ -30,8 +33,11 @@ function App() {
                 <Route path="/sign-up" component={SignUp} />
                 <Route path="/schedule" component={Schedule} />
                 <Route path="/doctors" component={Doctors} />
+                <Route path="/allPatients" component={AllPatients} />
                 <Route path="/bookings" component={Bookings} />
                 <Route path="/patientBookings" component={PatientBookings} />
+                <Route path="/patients" component={Patients} />
+                <Route path="/doctorBookings" component={DoctorBookings} />
               </Switch>
             </div>
           </UserContext.Provider>

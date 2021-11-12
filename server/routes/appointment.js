@@ -45,14 +45,38 @@ router.put("/status", auth, async (req, res) => {
 
 router.get("/approved", auth, async (req, res) => {
   try {
-    console.log(req.user._id);
     const result = await Appointment.find({
       patientId: req.user._id,
-      $or: [{ status: "Approved" }, { status: "Pending" }],
     })
       .populate("doctor schedule")
       .exec();
-    console.log(result);
+    res.send({ status: true, data: result });
+  } catch (error) {
+    res.send({ status: false, message: error.message });
+  }
+});
+
+router.get("/doctorBookings", auth, async (req, res) => {
+  try {
+    const result = await Appointment.find({
+      doctorId: req.user._id,
+      $or: [{ status: "Approved" }, { status: "Pending" }],
+    })
+      .populate("patient schedule")
+      .exec();
+    res.send({ status: true, data: result });
+  } catch (error) {
+    res.send({ status: false, message: error.message });
+  }
+});
+
+router.get("/patients", auth, async (req, res) => {
+  try {
+    const result = await Appointment.find({
+      doctorId: req.user._id,
+    })
+      .populate("patient")
+      .exec();
     res.send({ status: true, data: result });
   } catch (error) {
     res.send({ status: false, message: error.message });
