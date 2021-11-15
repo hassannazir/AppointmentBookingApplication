@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
+import CustomLoader from "./CustomLoader";
 
 // A super simple expandable component.
 const ExpandedComponent = ({ data }) => (
@@ -11,6 +12,7 @@ const ExpandedComponent = ({ data }) => (
 
 const Bookings = (props) => {
   const [rows, setRows] = React.useState([]);
+  const [pending, setPending] = React.useState(true);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
   const [bookingStatus, setBookingStatus] = React.useState(true);
   const approveBooking = async (aid) => {
@@ -102,7 +104,9 @@ const Bookings = (props) => {
       }
     );
     var data = bookingList.data.data;
+    if (data) setCookie("pendingCount", data.length);
     setRows(data);
+    setPending(false);
   });
 
   return (
@@ -114,6 +118,8 @@ const Bookings = (props) => {
         striped
         expandableRows
         expandableRowsComponent={ExpandedComponent}
+        progressPending={pending}
+        progressComponent={<CustomLoader />}
       />
     </div>
   );

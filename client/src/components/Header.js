@@ -50,6 +50,7 @@ const Header = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
+            variant="tabs"
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: "100px" }}
             navbarScroll
@@ -68,7 +69,7 @@ const Header = () => {
             {cookies.loggedInUser
               ? cookies.loggedInUser.role === Role.DOCTOR && (
                   <Link className="nav-link" to={"/bookings"}>
-                    <Button variant="outline-secondary">Bookings</Button>
+                    <Button variant="outline-secondary">Requests</Button>
                   </Link>
                 )
               : ""}
@@ -97,14 +98,14 @@ const Header = () => {
             {cookies.loggedInUser
               ? cookies.loggedInUser.role === Role.PATIENT && (
                   <Link className="nav-link" to={"/patientBookings"}>
-                    <Button variant="outline-secondary">My Appointments</Button>
+                    <Button variant="outline-secondary">Appointments</Button>
                   </Link>
                 )
               : ""}{" "}
             {cookies.loggedInUser
               ? cookies.loggedInUser.role === Role.DOCTOR && (
                   <Link className="nav-link" to={"/doctorBookings"}>
-                    <Button variant="outline-secondary">My Appointments</Button>
+                    <Button variant="outline-secondary">Appointments</Button>
                   </Link>
                 )
               : ""}{" "}

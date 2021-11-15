@@ -2,6 +2,7 @@ import DataTable from "react-data-table-component";
 import React from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import CustomLoader from "./CustomLoader";
 import { useAlert } from "react-alert";
 
 // A super simple expandable component.
@@ -13,6 +14,7 @@ const PatientBookings = (props) => {
   const alert = useAlert();
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
+  const [pending, setPending] = React.useState(true);
   const [isAdd, setisAdd] = React.useState(false);
 
   var id = props.location.id || cookies.loggedInUser._id;
@@ -56,7 +58,9 @@ const PatientBookings = (props) => {
         }
       );
       var data = scheduleList.data.data;
+      if (data) setCookie("pbCount", data.length);
       setRows(data);
+      setPending(false);
     }, 1000);
     return () => clearTimeout(timeout);
   }, []);
@@ -68,6 +72,8 @@ const PatientBookings = (props) => {
         data={rows}
         pagination
         striped
+        progressPending={pending}
+        progressComponent={<CustomLoader />}
         expandableRows
         expandableRowsComponent={ExpandedComponent}
       />

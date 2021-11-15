@@ -11,7 +11,17 @@ import logo3 from "../images/whealth3.png";
 import { UserContext } from "../contexts/userContext";
 
 export default function Home() {
-  const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
+  const [cookies, setCookie] = useCookies([
+    "loggedInUser",
+    "token",
+    "patientsCount",
+    "scheduleCount",
+    "requestCount",
+    "doctorsCount",
+    "pbCount",
+    "allPatientCount",
+    "pendingCount",
+  ]);
   const { currentUser, setcurrentUser } = useContext(UserContext);
   return (
     <div>
@@ -40,11 +50,20 @@ export default function Home() {
           </Carousel.Item>
         </Carousel>
       ) : cookies.loggedInUser.role === ROLE.DOCTOR ? (
-        <Doctor user={cookies.loggedInUser} token={cookies.token} />
+        <Doctor
+          user={cookies.loggedInUser}
+          patientCount={cookies.patientsCount}
+          scheduleCount={cookies.scheduleCount}
+          requestCount={cookies.requestCount}
+          pendingCount={cookies.pendingCount}
+        />
       ) : cookies.loggedInUser.role === ROLE.ADMIN ? (
-        <Admin />
+        <Admin
+          doctorCount={cookies.doctorsCount}
+          allPatientCount={cookies.allPatientCount}
+        />
       ) : (
-        <Patient />
+        <Patient pbCount={cookies.pbCount} doctorCount={cookies.doctorsCount} />
       )}
     </div>
   );

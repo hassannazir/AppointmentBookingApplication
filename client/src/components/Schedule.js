@@ -124,6 +124,7 @@ const Schedule = (props) => {
           schedule.startDate = schedule.startDate.split("T")[0];
           schedule.endDate = schedule.endDate.split("T")[0];
         });
+        setCookie("scheduleCount", data.length);
       }
       setRows(data);
       setPending(false);
@@ -159,7 +160,7 @@ const Schedule = (props) => {
               onClick={onCancel}
             />
           </a>
-          <form>
+          <form onSubmit={addNewSchedule}>
             <label style={{ display: "flex" }}>Start Date</label>
             <input
               type="date"
@@ -168,6 +169,7 @@ const Schedule = (props) => {
                 setNewSchedule({ ...newSchedule, startDate: e.target.value })
               }
               value={newSchedule.startDate}
+              required
             />
             <label style={{ display: "flex" }}>End Date</label>
             <input
@@ -177,6 +179,7 @@ const Schedule = (props) => {
                 setNewSchedule({ ...newSchedule, endDate: e.target.value })
               }
               value={newSchedule.endDate}
+              required
             />
             <label style={{ display: "flex" }}>Start Time</label>
             <input
@@ -186,6 +189,7 @@ const Schedule = (props) => {
                 setNewSchedule({ ...newSchedule, startTime: e.target.value })
               }
               value={newSchedule.startTime}
+              required
             />
             <label style={{ display: "flex" }}>End Time</label>
             <input
@@ -195,13 +199,14 @@ const Schedule = (props) => {
                 setNewSchedule({ ...newSchedule, endTime: e.target.value })
               }
               value={newSchedule.endTime}
+              required
             />
             <Button
               variant="primary"
               style={{
                 width: "100%",
               }}
-              onClick={addNewSchedule}
+              type="submit"
             >
               Add
             </Button>

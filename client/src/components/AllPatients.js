@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component";
 import React from "react";
 import axios from "axios";
+import CustomLoader from "./CustomLoader";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 
@@ -40,6 +41,7 @@ const columns = [
 const AllPatients = (props) => {
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
+  const [pending, setPending] = React.useState(true);
   const [searchDoc, setSearchDoc] = React.useState("");
 
   React.useEffect(async () => {
@@ -53,8 +55,10 @@ const AllPatients = (props) => {
       var d = data.filter((d) => {
         return d.name.includes(searchDoc) || d.address.includes(searchDoc);
       });
+      setCookie("allPatientCount", data.length);
     }
     setRows(d);
+    setPending(false);
   }, [searchDoc]);
 
   return (
@@ -73,6 +77,8 @@ const AllPatients = (props) => {
         data={rows}
         pagination
         striped
+        progressPending={pending}
+        progressComponent={<CustomLoader />}
         expandableRows
         expandableRowsComponent={ExpandedComponent}
       />

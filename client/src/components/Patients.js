@@ -12,6 +12,7 @@ const ExpandedComponent = ({ data }) => (
 
 const Patients = (props) => {
   const alert = useAlert();
+  const [pending, setPending] = React.useState(true);
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
   const [isAdd, setisAdd] = React.useState(false);
@@ -63,8 +64,11 @@ const Patients = (props) => {
             data.findIndex((item) => item.patientId == temp.patientId) === index
           );
         });
+        setCookie("patientsCount", filteredData.length);
       }
+
       setRows(filteredData);
+      setPending(false);
     }, 1000);
     return () => clearTimeout(timeout);
   }, []);
@@ -76,6 +80,8 @@ const Patients = (props) => {
         data={rows}
         pagination
         striped
+        progressPending={pending}
+        progressComponent={<CustomLoader />}
         expandableRows
         expandableRowsComponent={ExpandedComponent}
       />

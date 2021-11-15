@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useAlert } from "react-alert";
+import CustomLoader from "./CustomLoader";
 
 // A super simple expandable component.
 const ExpandedComponent = ({ data }) => (
@@ -10,6 +11,7 @@ const ExpandedComponent = ({ data }) => (
 );
 
 const DoctorBookings = (props) => {
+  const [pending, setPending] = React.useState(true);
   const alert = useAlert();
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
@@ -56,7 +58,9 @@ const DoctorBookings = (props) => {
         }
       );
       var data = scheduleList.data.data;
+      if (data) setCookie("requestCount", data.length);
       setRows(data);
+      setPending(false);
     }, 1000);
     return () => clearTimeout(timeout);
   }, []);
@@ -68,6 +72,8 @@ const DoctorBookings = (props) => {
         data={rows}
         pagination
         striped
+        progressPending={pending}
+        progressComponent={<CustomLoader />}
         expandableRows
         expandableRowsComponent={ExpandedComponent}
       />
