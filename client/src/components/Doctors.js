@@ -1,89 +1,106 @@
-import DataTable from "react-data-table-component";
-import React from "react";
-import CustomLoader from "./CustomLoader";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
-
-// A super simple expandable component.
-const ExpandedComponent = ({ data }) => (
-  <pre>{JSON.stringify(data, null, 2)}</pre>
-);
-
-const columns = [
-  {
-    name: "Name",
-    selector: (row) => row.name,
-    sortable: true,
-  },
-  {
-    name: "Email",
-    selector: (row) => row.email,
-    sortable: true,
-  },
-  {
-    name: "Contact",
-    selector: (row) => row.contact,
-    sortable: true,
-  },
-  {
-    name: "License",
-    selector: (row) => row.licenseNumber,
-    sortable: true,
-  },
-  {
-    name: "Speciality",
-    selector: (row) => row.speciality,
-    sortable: true,
-  },
-  {
-    name: "Address",
-    selector: (row) => row.address,
-    sortable: true,
-  },
-  {
-    cell: (row) => (
-      <Link
-        to={{
-          pathname: "/schedule",
-          id: row._id,
-        }}
-      >
-        <button className={"btn btn-danger btn-sm"}>Schedule</button>{" "}
-      </Link>
-    ),
-    ignoreRowClick: true,
-    allowOverflow: true,
-    button: true,
-  },
-];
-
+import Table from "react-bootstrap/Table";
+import ArrowRight from "react-bootstrap-icons//dist/icons/arrow-right";
+import ArrowLeft from "react-bootstrap-icons//dist/icons/arrow-left";
+import store from "../redux/store";
+import * as actions from "../redux/actions";
 const Doctors = (props) => {
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = useState([]);
+  const [rowsCopy, setRowsCopy] = useState([]);
+  const [newRows, setNewRows] = useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
-  const [pending, setPending] = React.useState(true);
-  const [searchDoc, setSearchDoc] = React.useState("");
+  const [searchDoc, setSearchDoc] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsOnLastPage, setRowsOnLastPage] = useState(0);
+  const [numOfPages, setNumOfPages] = useState(0);
+  const [nextPage, setNextPage] = useState(false);
+  const onPageNext = () => {
+    if (currentPage < numOfPages) {
+      if (currentPage + 1 == numOfPages)
+        setRowsPerPage(rowsPerPage + rowsOnLastPage);
+      else setRowsPerPage(rowsPerPage + 10);
+      setCurrentPage(currentPage + 1);
+      setNextPage(true);
+    }
+  };
+  const onPagePrev = () => {
+    if (currentPage > 0) {
+      if (currentPage == numOfPages)
+        setRowsPerPage(rowsPerPage - rowsOnLastPage);
+      else setRowsPerPage(rowsPerPage - 10);
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-  React.useEffect(async () => {
+  // useEffect(() => {
+  //   //const slicedData = rowsCopy.slice(currentPage * 10, rowsPerPage);
+  //   console.log(currentPage, rowsPerPage, rowsCopy);
+  //   if (currentPage != 0) {
+  //     if (nextPage) {
+  //       store.dispatch(
+  //         actions.onNextClick(currentPage * 10, rowsPerPage, rowsCopy)
+  //       );
+  //     } else {
+  //       store.dispatch(
+  //         actions.onPrevClick(currentPage * 10, rowsPerPage, rowsCopy)
+  //       );
+  //     }
+  //   }
+  //   console.log(currentPage, "9---", store.getState());
+  //   setRows(store.getState()[0].data);
+  //   //setRows(slicedData);
+  // }, [currentPage, rowsPerPage]);
+
+  useEffect(async () => {
     const scheduleList = await axios.get("http://localhost:5000/doctor/list", {
       headers: {
         "auth-token": cookies.token,
       },
     });
     var data = scheduleList.data.data;
+
     if (data) {
-      var d = data.filter((d) => {
-        return (
-          d.name.includes(searchDoc) ||
-          d.address.includes(searchDoc) ||
-          d.speciality.includes(searchDoc)
-        );
-      });
       setCookie("doctorsCount", data.length);
+      setRowsCopy(data);
+      setNewRows(data);
+
+      const size = data.length;
+      setNumOfPages(Math.ceil(size / 10) - 1);
+      setRowsOnLastPage(size % 10);
+      if (size < 10) setRowsPerPage(size);
+
+      //const slicedData = data.slice(currentPage * 10, rowsPerPage);
+      store.dispatch(actions.initialState(data));
+      store.getState();
+      store.dispatch(actions.firstPage(currentPage * 10, rowsPerPage));
+      console.log(store.getState(), "+++");
+      store.dispatch({ type: "None" });
+      console.log(store.getState(), "@@");
+      setRows(store.getState());
+      // setRows(rows);
     }
-    setRows(d);
-    setPending(false);
+  }, []);
+
+  useEffect(() => {
+    var d = newRows.filter((d) => {
+      return (
+        d.name.includes(searchDoc) ||
+        d.address.includes(searchDoc) ||
+        d.speciality.includes(searchDoc)
+      );
+    });
+    searchDoc == "" ? setRows(newRows) : setRows(d);
   }, [searchDoc]);
+
+  const border = {
+    borderWidth: "1px",
+    borderColor: "#7B7B7B",
+    borderStyle: "solid",
+  };
 
   return (
     <div style={{ margin: "1% 2%" }}>
@@ -96,16 +113,68 @@ const Doctors = (props) => {
           onChange={(e) => setSearchDoc(e.target.value)}
         />
       </div>
-      <DataTable
-        columns={columns}
-        data={rows}
-        pagination
-        striped
-        progressPending={pending}
-        progressComponent={<CustomLoader />}
-        expandableRows
-        expandableRowsComponent={ExpandedComponent}
-      />
+      <div>
+        <Table striped bordered hover variant="light" responsive>
+          <thead style={(border, { textAlign: "center" })}>
+            <th style={border}>Name</th>
+            <th style={border}>Email</th>
+            <th style={border}>Contact</th>
+            <th style={border}>License</th>
+            <th style={border}>Speciality</th>
+            <th style={border}>Address</th>
+            <th style={border}>Schedule</th>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => {
+              return (
+                <tr key={`${row._id}+${index}`}>
+                  <td>{row.name}</td>
+                  <td>{row.email}</td>
+                  <td>{row.contact}</td>
+                  <td>{row.licenseNumber}</td>
+                  <td>{row.speciality}</td>
+                  <td>{row.address}</td>
+                  <td>
+                    {" "}
+                    <Link
+                      to={{
+                        pathname: "/schedule",
+                        id: row._id,
+                      }}
+                    >
+                      <button className={"btn btn-danger btn-sm"}>
+                        Schedule
+                      </button>{" "}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+            <tr>
+              <td colSpan="7">
+                <span style={{ color: "grey" }}>
+                  Rows per page: {currentPage * 10 + 1}-{rowsPerPage} of{" "}
+                  {rowsCopy.length}
+                </span>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  style={{ marginLeft: "80%" }}
+                  onClick={onPagePrev}
+                >
+                  <ArrowLeft />{" "}
+                </button>
+                <button
+                  style={{ marginLeft: "1%" }}
+                  className="btn btn-sm btn-secondary"
+                  onClick={onPageNext}
+                >
+                  <ArrowRight />{" "}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 };
