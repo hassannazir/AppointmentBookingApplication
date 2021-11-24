@@ -14,7 +14,6 @@ const Bookings = (props) => {
   const [rows, setRows] = React.useState([]);
   const [pending, setPending] = React.useState(true);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
-  const [bookingStatus, setBookingStatus] = React.useState(true);
   const approveBooking = async (aid) => {
     await axios.put(
       "http://localhost:5000/appointment/status",
