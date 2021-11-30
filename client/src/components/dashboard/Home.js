@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import { useCookies } from "react-cookie";
-import ROLE from "../helpers/role";
-import Admin from "../components/dashboard/Admin";
-import Doctor from "../components/dashboard/Doctor";
-import Patient from "../components/dashboard/Patient";
+import ROLE from "../../helpers/role";
+import Admin from "./Admin";
+import Doctor from "./Doctor";
+import Patient from "./Patient";
 import Carousel from "react-bootstrap/Carousel";
-import logo1 from "../images/whealth1.png";
-import logo2 from "../images/whealth2.png";
-import logo3 from "../images/whealth3.png";
-import { UserContext } from "../contexts/userContext";
+import logo1 from "../../images/whealth1.png";
+import logo2 from "../../images/whealth2.png";
+import logo3 from "../../images/whealth3.png";
+import { UserContext } from "../../contexts/userContext";
 
 export default function Home() {
   const [cookies, setCookie] = useCookies([

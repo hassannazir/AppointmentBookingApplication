@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useAlert } from "react-alert";
-import ROLE from "../helpers/role";
-import { LoginContext } from "../contexts/loginContext";
-import { RegisterContext } from "../contexts/registerContext";
+import ROLE from "../../helpers/role";
+import { LoginContext } from "../../contexts/loginContext";
+import { RegisterContext } from "../../contexts/registerContext";
 
 const Signup = (props) => {
   const alert = useAlert();

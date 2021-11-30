@@ -1,20 +1,20 @@
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import SignUp from "./components/SignUp.js";
+import SignUp from "./components/authentication/SignUp.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Header from "./components/Header";
-import Home from "./components/Home";
+import Login from "./components/authentication/Login";
+import Header from "./components/dashboard/Header";
+import Home from "./components/dashboard/Home";
 import { LoginContext } from "./contexts/loginContext";
 import { RegisterContext } from "./contexts/registerContext";
 import { UserContext } from "./contexts/userContext";
 import { useState } from "react";
-import Schedule from "./components/Schedule";
-import Doctors from "./components/Doctors";
-import Bookings from "./components/Bookings";
-import PatientBookings from "./components/PatientBookings.js";
-import DoctorBookings from "./components/DoctorBookings.js";
-import Patients from "./components/Patients";
-import AllPatients from "./components/AllPatients";
+import Schedule from "./components/doctor/Schedule";
+import Doctors from "./components/doctor/Doctors";
+import Bookings from "./components/booking/Bookings";
+import PatientBookings from "./components/patient/PatientBookings.js";
+import DoctorBookings from "./components/doctor/DoctorBookings.js";
+import Patients from "./components/patient/Patients";
+import AllPatients from "./components/patient/AllPatients";
 
 function App() {
   const [isLogin, setisLogin] = useState(true);

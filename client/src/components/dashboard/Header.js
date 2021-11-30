@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useContext } from "react";
 import { useCookies } from "react-cookie";
-import { LoginContext } from "../contexts/loginContext";
-import { RegisterContext } from "../contexts/registerContext";
+import { LoginContext } from "../../contexts/loginContext";
+import { RegisterContext } from "../../contexts/registerContext";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
-import { UserContext } from "../contexts/userContext";
-import Role from "../helpers/role";
+import { UserContext } from "../../contexts/userContext";
+import Role from "../../helpers/role";
 
 const Header = () => {
   const alert = useAlert();

@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import React from "react";
-import CustomLoader from "./CustomLoader";
+import CustomLoader from "../custom/CustomLoader";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useCookies } from "react-cookie";

@@ -2,7 +2,7 @@ import DataTable from "react-data-table-component";
 import React from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import CustomLoader from "./CustomLoader";
+import CustomLoader from "../custom/CustomLoader";
 import { useAlert } from "react-alert";
 
 // A super simple expandable component.

@@ -1,9 +1,9 @@
 import axios from "axios";
-import logo from "../images/whealth.png";
+import logo from "../../images/whealth.png";
 import { useState, useContext } from "react";
 import { useAlert } from "react-alert";
 import { useCookies } from "react-cookie";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../../contexts/userContext";
 
 const Login = (props) => {
   const alert = useAlert();

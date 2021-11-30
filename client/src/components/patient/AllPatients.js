@@ -1,7 +1,7 @@
 import DataTable from "react-data-table-component";
 import React from "react";
 import axios from "axios";
-import CustomLoader from "./CustomLoader";
+import CustomLoader from "../custom/CustomLoader";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 

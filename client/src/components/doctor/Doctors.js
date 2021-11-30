@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import store from "../redux/store";
-import * as actions from "../redux/actions";
-import Grid from "./Grid/Grid";
-import Search from "./Grid/Search";
+import Grid from "../grid/Grid";
+import Search from "../grid/Search";
 const Doctors = (props) => {
   const [prevRows, setPrevRows] = useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
@@ -33,6 +31,7 @@ const Doctors = (props) => {
           setPages(totalPages);
           setTotalRows(total);
           setRowsPerPage(count);
+          setCookie("doctorsCount", total);
         }
       } catch (error) {}
     };

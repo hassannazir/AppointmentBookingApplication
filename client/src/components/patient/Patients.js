@@ -1,18 +1,18 @@
 import DataTable from "react-data-table-component";
 import React from "react";
+import CustomLoader from "../custom/CustomLoader";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useAlert } from "react-alert";
-import CustomLoader from "./CustomLoader";
 
 // A super simple expandable component.
 const ExpandedComponent = ({ data }) => (
   <pre>{JSON.stringify(data, null, 2)}</pre>
 );
 
-const DoctorBookings = (props) => {
-  const [pending, setPending] = React.useState(true);
+const Patients = (props) => {
   const alert = useAlert();
+  const [pending, setPending] = React.useState(true);
   const [rows, setRows] = React.useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
   const [isAdd, setisAdd] = React.useState(false);
@@ -26,23 +26,23 @@ const DoctorBookings = (props) => {
       sortable: true,
     },
     {
+      name: "Email",
+      selector: (row) => row.patient[0].email,
+      sortable: true,
+    },
+    {
       name: "Contact",
       selector: (row) => row.patient[0].contact,
       sortable: true,
     },
     {
-      name: "Date",
-      selector: (row) => row.schedule[0].startDate.split("T")[0],
+      name: "Address",
+      selector: (row) => row.patient[0].address,
       sortable: true,
     },
     {
-      name: "Time",
-      selector: (row) => row.schedule[0].startTime,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.status,
+      name: "Created At",
+      selector: (row) => row.createdAt.split("T")[0],
       sortable: true,
     },
   ];
@@ -50,7 +50,7 @@ const DoctorBookings = (props) => {
   React.useEffect(async () => {
     const timeout = setTimeout(async () => {
       const scheduleList = await axios.get(
-        "http://localhost:5000/appointment/doctorBookings",
+        "http://localhost:5000/appointment/patients",
         {
           headers: {
             "auth-token": cookies.token,
@@ -58,8 +58,16 @@ const DoctorBookings = (props) => {
         }
       );
       var data = scheduleList.data.data;
-      if (data) setCookie("requestCount", data.length);
-      setRows(data);
+      if (data) {
+        var filteredData = data.filter((temp, index) => {
+          return (
+            data.findIndex((item) => item.patientId == temp.patientId) === index
+          );
+        });
+        setCookie("patientsCount", filteredData.length);
+      }
+
+      setRows(filteredData);
       setPending(false);
     }, 1000);
     return () => clearTimeout(timeout);
@@ -80,4 +88,4 @@ const DoctorBookings = (props) => {
     </div>
   );
 };
-export default DoctorBookings;
+export default Patients;
