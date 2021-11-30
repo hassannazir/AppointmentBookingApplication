@@ -17,6 +17,10 @@ const UserSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-
+mongoose.connection.collection("users").createIndex({
+  name: "text",
+  speciality: "text",
+  address: "text",
+});
 const User = mongoose.model("User", UserSchema);
 module.exports = User;

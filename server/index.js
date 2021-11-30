@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 });
 
 //Set up mongoose connection
-var mongoDB = config.mongodbURI;
+var mongoDB = config.get("mongodbURI");
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
