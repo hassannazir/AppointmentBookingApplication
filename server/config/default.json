@@ -1,4 +1,4 @@
 {
-    "mongodbURI":  "mongodb+srv://whealth:whealth123@hafiz-cluster.2s8dc.mongodb.net/whealthdb?retryWrites=true&w=majority",
+    "mongodbURI":  "mongodb://whealth:whealth123@hafiz-cluster-shard-00-00.2s8dc.mongodb.net:27017,hafiz-cluster-shard-00-01.2s8dc.mongodb.net:27017,hafiz-cluster-shard-00-02.2s8dc.mongodb.net:27017/whealthdb?authSource=admin&replicaSet=atlas-cdognd-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
     "jwtSecretKey":"My_jwt_key"
 }

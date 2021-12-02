@@ -12,7 +12,6 @@ const rotate360 = keyframes`
 `;
 
 const Spinner = styled.div`
-  margin: 16px;
   animation: ${rotate360} 1s linear infinite;
   transform: translateZ(0);
   border-top: 2px solid grey;
@@ -25,10 +24,10 @@ const Spinner = styled.div`
   border-radius: 50%;
 `;
 
-const CustomLoader = () => {
+const CustomLoader = (props) => {
   return (
     <div style={{ padding: "24px" }}>
-      <Spinner />
+      {props.check ? <Spinner style={{ marginLeft: "47%" }} /> : <Spinner />}
       <div>Loading...</div>
     </div>
   );

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import Grid from "../grid/Grid";
 import Search from "../grid/Search";
+import CustomLoader from "../custom/CustomLoader";
+
 const Doctors = (props) => {
   const [prevRows, setPrevRows] = useState([]);
   const [cookies, setCookie] = useCookies(["loggedInUser", "token"]);
@@ -32,6 +34,7 @@ const Doctors = (props) => {
           setTotalRows(total);
           setRowsPerPage(count);
           setCookie("doctorsCount", total);
+          setLoading(false);
         }
       } catch (error) {}
     };
@@ -74,6 +77,8 @@ const Doctors = (props) => {
           total={totalRows}
           rowsPerPage={rowsPerPage}
           setLimit={setLimit}
+          progressPending={loading}
+          progressComponent={<CustomLoader />}
         ></Grid>
       </div>
     </div>

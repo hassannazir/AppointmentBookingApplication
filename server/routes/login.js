@@ -23,6 +23,13 @@ router.post("", async (req, res) => {
       }
       if (isVerify) {
         try {
+          //Checking User Status
+          if (!loggedInUser[0].status) {
+            return res.send({
+              status: false,
+              message: "CONTACT ADMIN!! You are blocked by Admin.",
+            });
+          }
           const token = jwt.sign(
             { user: loggedInUser },
             config.get("jwtSecretKey"),
