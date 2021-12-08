@@ -2,10 +2,16 @@ const express = require("express");
 const router = express();
 const Schedule = require("../models/Schedule");
 const auth = require("../middleware/auth");
-router.post("/get", auth, async (req, res) => {
+router.post("/get", async (req, res) => {
   try {
     const id = req.body.id;
-    const scheduleList = await Schedule.find({ doctorId: id }).exec();
+    const scheduleList = await Schedule.find({
+      doctorId: id,
+    })
+      .sort({
+        createdAt: -1,
+      })
+      .exec();
     if (scheduleList.length) {
       res.send({ status: true, data: scheduleList });
     } else {
@@ -16,7 +22,7 @@ router.post("/get", auth, async (req, res) => {
   }
 });
 
-router.post("/add", auth, async (req, res) => {
+router.post("/add", async (req, res) => {
   try {
     const newSchedule = req.body;
     if (newSchedule) {
